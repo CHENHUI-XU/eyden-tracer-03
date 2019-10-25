@@ -46,10 +46,39 @@ public:
 	{
 		if (isLeaf()) {
 			// --- PUT YOUR CODE HERE ---
-			return true;
+			bool hit = false;
+			
+			float oldT = ray.t;
+			for (auto pPrim : m_vpPrims) {
+				hit |= pPrim->Intersect(ray);
 		} else {
 			// --- PUT YOUR CODE HERE ---
-			return true;
+			float d = (m_splitVal - ray.org[m_splitDim]) / ray.dir[m_splitDim];
+			std::shared_ptr<CBSPNode> near, far;
+			//scenario 1
+			if (d > 0) {
+				near = m_pLeft;
+				far = m_pRight;
+			}
+			else {
+				near = m_pRight;
+				far = m_pLeft;
+			}
+			//for the invalid cases
+			if (ray.dir[m_splitDim] < 0) {
+				std::swap(near, far);
+			}
+			if (d > t1 || d < 0) {
+				return near->traverse(ray, t0, t1);
+			}
+			else if (d < t0) {
+				return far->traverse(ray, t0, t1);
+			}
+			else {
+				bool hit = near->traverse(ray, t0, d);
+				if (hit) return hit;
+				return far->traverse(ray, d, t1);
+			}
 		}
 	}
 

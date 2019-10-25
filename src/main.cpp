@@ -37,12 +37,13 @@ Mat RenderFrame(void)
 	Mat img(scene.m_pCamera->getResolution(), CV_32FC3);		// image array
 	Ray ray;                                          			// primary ray
 
-	for (int y = 0; y < img.rows; y++)
+	for (int y = 0; y < img.rows; y++){
+		std::cout << "Calculating pixel y: " << y << std::endl;
 		for (int x = 0; x < img.cols; x++) {
 			scene.m_pCamera->InitRay(x, y, ray); // initialize ray
 			img.at<Vec3f>(y, x) = scene.RayTrace(ray); 
 		}
-	
+	}
 	img.convertTo(img, CV_8UC3, 255);
 	return img;
 }

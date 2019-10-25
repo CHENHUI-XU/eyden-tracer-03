@@ -1,4 +1,5 @@
 #include "Scene.h"
+#include "PrimSphere.h"
 
 #include "ShaderEyelight.h"
 #include "ShaderPhong.h"
